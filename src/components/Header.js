@@ -4,7 +4,7 @@ import {AiOutlineMenu} from 'react-icons/ai';
 import { HiUserCircle } from 'react-icons/hi';
 import {BiSearch} from 'react-icons/bi';
 
-const Header = () => {
+const Header = ({...props}) => {
     const [navColor, setNavColor] = useState('#ffffff');
     const onMouseOverNav = () =>{
         setNavColor('#d5d3d3');
@@ -16,7 +16,7 @@ const Header = () => {
     return (
         <s.Container>
             <s.Left>
-                <s.NavIconArea onMouseOver={() => onMouseOverNav()} onMouseOut={() => onMouseOutNav()}>
+                <s.NavIconArea onMouseOver={() => onMouseOverNav()} onMouseOut={() => onMouseOutNav()} onClick = {() => props.onClickMenu()}>
                     <AiOutlineMenu size={50} cursor={'pointer'} color={navColor} />
                 </s.NavIconArea>
                 <s.LogoArea>
