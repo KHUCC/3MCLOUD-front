@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import * as s from './HeaderStyled';
 import {AiOutlineMenu} from 'react-icons/ai';
 import { HiUserCircle } from 'react-icons/hi';
+import {BiSearch} from 'react-icons/bi';
 
 const Header = () => {
     const [navColor, setNavColor] = useState('#ffffff');
@@ -24,11 +25,12 @@ const Header = () => {
             </s.Left>
             <s.Right>
                 <s.SearchArea>
-                    <s.SearchInput />
+                    <s.SearchInput placeholder = "파일을 검색하세요" />
                 </s.SearchArea>
                 <s.UserLogoArea>
                     <HiUserCircle size={50} cursor={'pointer'} color={'#ffffff'} />
                 </s.UserLogoArea>
+                <s.WhiteSpace/>
             </s.Right>
         </s.Container>
     );

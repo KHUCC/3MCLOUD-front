@@ -41,6 +41,9 @@ export const Right = styled.div`
 
     display: flex;
 `;
+export const WhiteSpace = styled.div`
+    flex: 0.3;
+`;
 
 export const UserLogoArea = styled.div`
     flex: 1;
@@ -60,4 +63,11 @@ export const SearchArea = styled.div`
 
 export const SearchInput = styled.input`
     height: 30px;
+    border: none;
+    ::placeholder{
+        color: '#e2e2e2';
+        text-align: center;
+    }
+    border-radius: 5px;
+    margin-right: 10px;
 `;
