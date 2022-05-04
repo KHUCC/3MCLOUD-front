@@ -6,6 +6,7 @@ import Sidebar from './components/Sidebar';
 
 import Login from './views/login/Login';
 import Regisiter from './views/register/Register';
+import SharedFileList from './views/sharedlist/SharedFileList';
 import Main from './views/main/Main';
 import { RouterDivision } from './RouterDivision';
 
@@ -23,6 +24,7 @@ export default ({}) => {
                 <Header onClickMenu={onClickMenu} />
                 <Routes>
                     <Route path="/" element={<Login />}></Route>
+                    <Route path="/shared" element={<SharedFileList />}></Route>
                     <Route path="/register" element={<Regisiter />}></Route>
                 </Routes>
 
