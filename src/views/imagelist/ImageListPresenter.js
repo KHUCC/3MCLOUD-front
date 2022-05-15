@@ -1,7 +1,7 @@
 import React, {useRef, useState} from 'react';
 import * as s from './ImageListStyled';
 
-const ImageListPresenter = () => {
+const ImageListPresenter = ({...props}) => {
     const ref = useRef();
     const [x, setX] = useState(null);
     const [y, setY] = useState(null);
@@ -14,7 +14,7 @@ const ImageListPresenter = () => {
         setTargetImage(e.target.src);
         
     }
-    console.log(x, y);
+
     const onMoustOutImage = () => {
         setX(0);
         setY(0);
@@ -32,7 +32,14 @@ const ImageListPresenter = () => {
                 <s.Container>
                     <s.FileGroupTitle>내 디렉토리 - 이미지</s.FileGroupTitle>
                     <s.FileDescription>asdasdas</s.FileDescription>
-                    <s.FileListContainer>
+                    <s.FileListContainer ref={props.dragRef} isDragging={props.isDragging} htmlFor="fileupload">
+                        <input
+                            type="file"
+                            id="fileUpload"
+                            style={{ display: 'none', width: '100%', height: '100%' }}
+                            multiple={true}
+                            onChange={props.onChangeFiles}
+                        />
                         <s.ImageContainer>
                             <img
                                 ref={ref}

@@ -36,9 +36,9 @@ export const FileListContainer = styled.div`
     flex: 7;
     border-bottom: 1px solid gray;
     overflow-y: scroll;
-    width: 100%; 
+    width: 100%;
     text-align: left;
-
+    background-color: ${(props) => props.isDragging ? '#e2e2e2':'white'};
 `;
 
 
@@ -47,6 +47,23 @@ export const FileDescription = styled.div`
     width: 100%;
     background-color: #6dc4db;
     display: flex;
+`;
+
+export const DescriptionDrop = styled.div`
+    position: fixed;
+    background-color: gray;
+    opacity: 0.5;
+    display: flex;
+    justify-items: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+`;
+
+export const DescriptionDropMessage = styled.div`
+    color: white;
+    font-size: 30px;
+    font-weight: bolder;
 `;
 
 export const ImageContainer = styled.span`

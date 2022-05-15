@@ -1,11 +1,12 @@
 import React from 'react';
 import * as s from './MainStyled';
+import Dragdrop from '../../components/Dragdrop';
 
-const MainPresenter = () => {
+const MainPresenter = ({...props}) => {
     return (
         <>
             <s.Container>
-                <h1>test</h1>
+                <Dragdrop setFiles = {props.setFiles}/>
             </s.Container>
         </>
     );

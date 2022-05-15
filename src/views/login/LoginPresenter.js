@@ -1,6 +1,7 @@
 import React from 'react';
 import * as s from './LoginStyled';
 import { Link } from 'react-router-dom';
+
 const LoginPresenter = ({ ...props }) => {
     return (
         <s.Wrapper>
@@ -15,7 +16,7 @@ const LoginPresenter = ({ ...props }) => {
 
                 <s.RegisterArea>
                     <s.RegisterQuestion>계정이 없으신가요?</s.RegisterQuestion>
-                    <Link to="/register">
+                    <Link to="/register" style= {{textDecoration: 'none', textDecorationLine:'none'}}>
                         <s.ToRegister>회원가입</s.ToRegister>
                     </Link>
                 </s.RegisterArea>
