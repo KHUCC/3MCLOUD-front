@@ -14,7 +14,7 @@ export const Wrapper = styled.div`
 
 export const Container = styled.div`
     width: 50%;
-    height: 50%;
+    height: 55%;
     border: 1.5px solid gray;
     border-radius: 10px;
     border-color: #6dc4db;
@@ -43,10 +43,12 @@ export const RegisterArea = styled.div`
     justify-content: center;
     align-items: center;
 `;
+export const FormArea = styled.div`
+    flex: 1;
+    width: 100%;
+`;
 export const InputArea = styled.input`
     width: 65%;
-    margin-top: 5px;
-    margin-bottom: 5px;
     padding-left: 10px;
     padding-top: 10px;
     padding-bottom: 10px;
@@ -56,8 +58,9 @@ export const InputArea = styled.input`
     outline: none;
 `;
 
+
 export const RegisterButton = styled.button`
-    flex: 1;
+    flex: 0.7;
     font-size: 100%;
     font-weight: bold;
     width: 65%;
@@ -91,7 +94,8 @@ export const ToLogin = styled.h5`
 `;
 
 export const ValidText = styled.div`
-    color: red;
     height: 10px;
     font-size: 10px;
+    color: ${(props) => (props.validEmail ? 'blue' : 'red')};
+    cursor: ${(props) => (props.validEmail ? 'pointer' : 'default')};
 `;
