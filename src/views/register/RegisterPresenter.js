@@ -17,7 +17,7 @@ const RegisterPresenter = ({ ...props }) => {
                         />
                         <s.ValidText>
                             {props.validIdLength ? '' : '아이디는 4글자 이상입니다'}
-                            {props.validIdExist ? '' : '이미 사용중인 아이디입니다'}
+                            {/* {props.validIdExist ? '' : '이미 사용중인 아이디입니다'} */}
                         </s.ValidText>
                     </s.FormArea>
                     <s.FormArea>

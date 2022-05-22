@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
+import { authApi } from '../../api/api';
 import RegisterPresenter from './RegisterPresenter';
-
+import { useNavigate } from 'react-router-dom';
 
 const RegisterContainer = ({}) => {
+    const navigate = useNavigate();
     const [id, setId] = useState('');
     const [password, setPassword] = useState('');
     const [passwordConfirm, setPasswordConfirm] = useState('');
@@ -38,10 +40,10 @@ const RegisterContainer = ({}) => {
 
     //validation id, password
     const checkIdLength = () => {
-        1 <= id.length && id.length <= 3 ? setValidIdLength(false) : setValidIdLength(true);
+        0 <= id.length && id.length <= 3 ? setValidIdLength(false) : setValidIdLength(true);
     };
     const checkPasswordLength = () => {
-        1 <= password.length && password.length <= 7 ? setValidPasswordLength(false) : setValidPasswordLength(true);
+        0 <= password.length && password.length <= 7 ? setValidPasswordLength(false) : setValidPasswordLength(true);
     };
 
     const checkPasswordConfirm = () => {
@@ -59,9 +61,32 @@ const RegisterContainer = ({}) => {
         }
     };
 
-    const onClickAuthen = () => {
-        if(!validEmail) return;
-        setMailSend(true);
+    const onClickAuthen = async() => {
+
+        if(!validEmail || !validIdLength || !validPasswordLength || !validPasswordConfirm) return;
+        const form = {
+            username: id,
+            password: password,
+            email: email
+        };
+        let res = null;
+        try{
+            setMailSend(true);
+            res = await authApi.getAuth(form);
+        } catch(e){
+            alert('오류가 발생하였습니다. 서버를 확인해주세요')
+        }
+        finally{
+            if(res){
+                if(res.data.result == "OK"){
+                    alert('메일 인증번호가 발급되었습니다. 메일을 확인해주세요');
+                } else{
+                    alert('아이디가 이미 존재합니다. 다시 시도해주세요');
+                    setMailSend(false);
+                }
+            }
+        }
+        
     }
 
     const onSubmitRegister = async () => {
@@ -74,66 +99,72 @@ const RegisterContainer = ({}) => {
             return;
         }
         const registerForm = {
-            user_id: id,
-            user_pw: password,
+            username: id,
+            password: password,
+            email: email,
+            confirmcode: authen,
         };
         if (id !== '' && password !== '' && passwordConfirm !== '') {
-            if (!(validIdLength && validIdExist && validPasswordLength && validPasswordConfirm)) {
+            if (!(validIdLength && validPasswordLength && validPasswordConfirm)) {
                 return;
             } else {
-                let result = null;
+                let res = null;
                 try {
-                    // result = await userApi.createUser(registerForm);
+                    res = await authApi.register(registerForm);
                 } catch (e) {
+                    alert('오류가 발생하였습니다. 서버를 확인해주세요');
                 } finally {
-                    if (result.status === 200) {
-                        if (result.data === '') {
-                            alert('실패하였습니다');
-                            setId('');
-                            setPassword('');
-                            setPasswordConfirm('');
-                            return;
-                        }
-                        alert('회원가입이 완료되었습니다');
-
-                    } else {
-                        alert('잘못된 접근입니다.');
+                    if (res.data.result === "OK") {
                         setId('');
                         setPassword('');
                         setPasswordConfirm('');
+                        setAuthen('');
+                        setMailSend(false);
+                        setEmail('');
+                        alert('회원가입이 완료되었습니다');
+                        navigate('/');
+
+                    } else {
+                        alert('이메일 인증번호를 확인해주세요');
                         return;
                     }
                 }
             }
         } else {
             alert('빈 칸을 모두 채워주시길 바랍니다');
+            
         }
     };
 
 
-    //아이디 중복 검증
-    useEffect(() => {
-        if (id === '') {
-            setValidIdExist(true);
-            setValidIdLength(true);
-        }
-        const IdExists = async () => {
-            let result = null;
-            try {
-                // result = await userApi.isExists(id);
-            } catch (e) {
-            } finally {
-                if (!result) {
-                    return;
-                }
-                result.data ? setValidIdExist(false) : setValidIdExist(true);
-            }
-        };
+    // //아이디 중복 검증
+    // useEffect(() => {
+    //     if (id === '') {
+    //         setValidIdExist(true);
+    //         setValidIdLength(true);
+    //     }
+    //     const IdExists = async () => {
+    //         let result = null;
+    //         try {
+    //             // result = await userApi.isExists(id);
+    //         } catch (e) {
+    //         } finally {
+    //             if (!result) {
+    //                 return;
+    //             }
+    //             result.data ? setValidIdExist(false) : setValidIdExist(true);
+    //         }
+    //     };
 
-        checkIdLength();
-        IdExists();
-    }, [id]);
+    //     checkIdLength();
+    //     IdExists();
+    // }, [id]);
     // 패스워드 8글자 검증
+    useEffect(() => {
+        checkIdLength();
+
+    }, [id]);
+
     useEffect(() => {
         checkPasswordLength();
     }, [password]);
@@ -143,9 +174,11 @@ const RegisterContainer = ({}) => {
         checkPasswordConfirm();
     }, [passwordConfirm, password]);
 
+    //이메일 정규식 검증
     useEffect(() => {
         checkEmail();
     }, [email]);
+
     return (
         <RegisterPresenter
             id={id}

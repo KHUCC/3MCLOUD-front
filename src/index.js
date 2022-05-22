@@ -5,13 +5,13 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import './index.css';
 import App from './App';
 
+const rootNode = document.getElementById('root');
 
-ReactDOM.render(
-  <React.StrictMode>
+
+ReactDOM.createRoot(rootNode).render(
+
     <RecoilRoot>
       <App/>
     </RecoilRoot>
-  </React.StrictMode>,
-    document.getElementById('root')
 );
 
