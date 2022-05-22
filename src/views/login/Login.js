@@ -18,7 +18,7 @@ const LoginContainer = () => {
         setPassword(e.target.value);
     };
 
-    const [token, setToken] = useRecoilState(recoilItem);
+    const [token, setToken] = useRecoilState(recoilItem.access_token);
     const navigate = useNavigate();
 
     const onSubmitLogin = async () => {
