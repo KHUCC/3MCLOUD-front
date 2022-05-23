@@ -22,8 +22,8 @@ const { persistAtom } = recoilPersist({
     storage: localStorage,
 });
 
-export const access_token = atom({
-    key: 'access_token',
+export const id_token = atom({
+    key: 'id_token',
     default: '',
     effects_UNSTABLE: [persistAtom]
 })
