@@ -18,7 +18,10 @@ const LoginContainer = () => {
         setPassword(e.target.value);
     };
 
-    const [token, setToken] = useRecoilState(recoilItem.id_token);
+    const [accessToken, setAccessToken] = useRecoilState(recoilItem.access_token);
+    const [idToken, setIdToken] = useRecoilState(recoilItem.id_token);
+    const [userId, setUserId] = useRecoilState(recoilItem.user_id);
+
     const navigate = useNavigate();
 
     const onSubmitLogin = async () => {
@@ -34,11 +37,12 @@ const LoginContainer = () => {
                 result = await authApi.login(loginForm);
             } catch (e) {
             } finally {
-                console.log(result);
                 if (result.data.result == "OK") {
                     if (result.data.token !== '' && result.data.token !== null) {
-                        setToken(result.data.token);
-                        console.log(token);
+                        console.log(result.data);
+                        setAccessToken(result.data.AccessToken);
+                        setIdToken(result.data.IdToken);
+                        setUserId(id);
                         setLoginValid(true);
                         navigate('/');
                     } else {

@@ -17,6 +17,17 @@ export const textLengthOverCut = ({ ...props }) => {
     return txt;
 };
 
+export const getFileType = (filename) => {
+    let fileLen = filename.length;
+    let lastDot = filename.lastIndexOf('.');
+    let fileType = filename.substring(lastDot, fileLen).toLowerCase();
+
+    if(fileType === '.png' || fileType === '.jpg' || fileType === '.jpeg') return "photo";
+
+    return "else";
+
+}
+
 const { persistAtom } = recoilPersist({
     key: 'recoil-persist',
     storage: localStorage,
@@ -24,6 +35,18 @@ const { persistAtom } = recoilPersist({
 
 export const id_token = atom({
     key: 'id_token',
+    default: '',
+    effects_UNSTABLE: [persistAtom]
+})
+
+export const access_token = atom({
+    key: 'access_token',
+    default: '',
+    effects_UNSTABLE: [persistAtom]
+})
+
+export const user_id = atom({
+    key: 'user_id',
     default: '',
     effects_UNSTABLE: [persistAtom]
 })

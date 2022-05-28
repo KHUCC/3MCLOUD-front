@@ -64,11 +64,6 @@ const RegisterContainer = ({}) => {
     const onClickAuthen = async() => {
 
         if(!validEmail || !validIdLength || !validPasswordLength || !validPasswordConfirm) return;
-        
-        // const form = new FormData();
-        // form.append("username", id);
-        // form.append("password", password);
-        // form.append('email', email);
         const form = {
             username: id,
             password: password,
@@ -82,7 +77,6 @@ const RegisterContainer = ({}) => {
             alert('오류가 발생하였습니다. 서버를 확인해주세요')
         }
         finally{
-            console.log(res);
             if(res){
                 if(res.data.result == "OK"){
                     alert('메일 인증번호가 발급되었습니다. 메일을 확인해주세요');

@@ -36,7 +36,11 @@ const Sidebar = ({NavVisible}) => {
 
                     {/* 메뉴 영역 */}
                     <s.DropDownBlock>
-                        <s.MenuItemHaveList>내 디렉토리</s.MenuItemHaveList>
+                        <StyledLink to="/directory" state ={{
+                            path: ''
+                        }}>
+                            <s.MenuItemHaveList>내 디렉토리</s.MenuItemHaveList>
+                        </StyledLink>
                         <StyledLink to="/images">
                             <s.MenuItemHaveList>사진</s.MenuItemHaveList>
                         </StyledLink>

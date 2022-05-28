@@ -9,6 +9,7 @@ import Regisiter from './views/register/Register';
 import SharedFileList from './views/sharedlist/SharedFileList';
 import ImageList from './views/imagelist/ImageList';
 import Main from './views/main/Main';
+import Directory from './views/directory/Directory';
 import { RouterDivision } from './RouterDivision';
 
 
@@ -28,6 +29,7 @@ export default ({}) => {
                     <Route path="/shared" element={<SharedFileList />}></Route>
                     <Route path="/register" element={<Regisiter />}></Route>
                     <Route path = "/images" element = {<ImageList/>}></Route>
+                    <Route path = "/directory" element = {<Directory/>}></Route>
                 </Routes>
 
                 <Routes>
