@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom';
+import { BrowserRouter, Route, Routes, Navigate, useNavigate } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
 import Header from './components/Header';
 import Sidebar from './components/Sidebar';
@@ -12,30 +12,33 @@ import Main from './views/main/Main';
 import Directory from './views/directory/Directory';
 import { RouterDivision } from './RouterDivision';
 import SearchContainer from './views/search/Search';
-
+import * as u from './utils/util';
+import { authApi } from './api/api';
 
 
 export default ({}) => {
     const [NavVisible, setNavVisible] = useState(true);
+    const idtoken = useRecoilValue(u.id_token);
     const onClickMenu = () => {
+        console.log(idtoken);
+        if(!idtoken) {
+            setNavVisible(false);
+        }
         setNavVisible(!NavVisible);
     }
+
     return (
         <BrowserRouter>
             <RouterDivision>
-                <Sidebar NavVisible={NavVisible} onClickMenu={() => onClickMenu()} />
-                <Header onClickMenu={onClickMenu} />
+                <Sidebar NavVisible={NavVisible} setNavVisible={setNavVisible} onClickMenu={() => onClickMenu()} />
+                <Header NavVisible={NavVisible} setNavVisible={setNavVisible} onClickMenu={onClickMenu} />
                 <Routes>
-                    <Route path="/" element={<Login />}></Route>
                     <Route path="/shared" element={<SharedFileList />}></Route>
+                    <Route path="/images" element={<ImageList />}></Route>
+                    <Route path="/directory" element={<Directory />}></Route>
+                    <Route path="/search" element={<SearchContainer />}></Route>
+                    <Route path="/" setNavVisible={setNavVisible} element={<Login />}></Route>
                     <Route path="/register" element={<Regisiter />}></Route>
-                    <Route path = "/images" element = {<ImageList/>}></Route>
-                    <Route path = "/directory" element = {<Directory/>}></Route>
-                    <Route path = "/search" element = {<SearchContainer/>}></Route>
-                </Routes>
-
-                <Routes>
-                    <Route path="/main" element={<Main />}></Route>
                 </Routes>
             </RouterDivision>
         </BrowserRouter>

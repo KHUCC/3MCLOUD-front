@@ -1,41 +1,30 @@
 import React, {useRef, useState} from 'react';
 import * as s from './DirectoryStyled';
 import {getFileType} from '../../utils/util';
-import { BsFileEarmark } from 'react-icons/bs';
+import { BsFileEarmark, BsFolder } from 'react-icons/bs';
 import { textLengthOverCut } from '../../utils/util';
 import { SpinnerCircular } from 'spinners-react';
 
 const DirectoryPresenter = ({...props}) => {
-    const ref = useRef();
-    const [x, setX] = useState(null);
-    const [y, setY] = useState(null);
-    const [targetImage, setTargetImage] = useState("");
-
     const [target, setTarget] = useState('');
-    const onMouseOverImage = (e) => {
+    const { fileList, folderList, filePath, isLoading, downloadFile, onChangeFiles, setFilePath } = props;
 
-        setX(e.target.getBoundingClientRect().x+100);
-        setY(e.target.getBoundingClientRect().y);
-        setTargetImage(e.target.src);
-        
+    const prevFolder = (path) => {
+        let paths = path.split("/");
+        if(paths.length == 1){
+            return "";
+        } else {
+            let returnPath = "";
+            paths.forEach((value, index) => {
+                returnPath = returnPath + value + "/";
+            })
+            returnPath = returnPath.slice(0, -1);
+            return returnPath;
+        }
     }
 
-    const onMoustOutImage = () => {
-        setX(0);
-        setY(0);
-        setTargetImage("");
-    }
-
-    
-
-    const { fileList, folderList, filePath, isLoading, downloadFile, onChangeFiles } = props;
     return (
         <>
-            {x ? (
-                <s.ImagePreview x={x} y={y}>
-                    <img width={300} height={300} src={targetImage} />
-                </s.ImagePreview>
-            ) : null}
             <s.Wrapper>
                 <s.Container>
                     <s.FileListHeader>
@@ -45,7 +34,7 @@ const DirectoryPresenter = ({...props}) => {
                             <s.UploadButton htmlFor="fileUpload">파일 업로드</s.UploadButton>
                         </s.UploadButtonArea>
                     </s.FileListHeader>
-                    <s.FileDescription>{'/' + filePath + target}</s.FileDescription>
+                    <s.FileDescription>{'/' + (filePath === "" ? "" : filePath+"/") + target}</s.FileDescription>
                     <s.FileListContainer ref={props.dragRef} isDragging={props.isDragging} htmlFor="fileupload">
                         {isLoading ? (
                             <s.SpinnerArea>
@@ -60,11 +49,27 @@ const DirectoryPresenter = ({...props}) => {
                                     multiple={true}
                                     onChange={props.onChangeFiles}
                                 />
-
-                                {folderList.length === 0 ? null : null}
-                                {fileList.length === 0
-                                    ? null
-                                    : fileList.map((item, index) => (
+                                {filePath !== '' ? (
+                                    <s.FileContainer onDoubleClick = {() => setFilePath(prevFolder(filePath))}>
+                                        <BsFolder size={90} /> <br />
+                                        <s.FileName>../</s.FileName>
+                                    </s.FileContainer>
+                                ) : null}
+                                {folderList
+                                    ? folderList.map((item, index) => (
+                                          <s.FileContainer
+                                              key={index}
+                                              onMouseOver={() => setTarget(item)}
+                                              onMouseLeave={() => setTarget('')}
+                                              onDoubleClick={() => setFilePath(filePath + item)}
+                                          >
+                                              <BsFolder size={90} /> <br />
+                                              <s.FileName>{textLengthOverCut({ txt: item, len: 15, lastTxt: '...' })}</s.FileName>
+                                          </s.FileContainer>
+                                      ))
+                                    : null}
+                                {fileList
+                                    ? fileList.map((item, index) => (
                                           <s.FileContainer
                                               key={index}
                                               onDoubleClick={() => downloadFile(item)}
@@ -75,81 +80,8 @@ const DirectoryPresenter = ({...props}) => {
                                               <br />
                                               <s.FileName>{textLengthOverCut({ txt: item, len: 15, lastTxt: '...' })}</s.FileName>
                                           </s.FileContainer>
-                                      ))}
-                                {/* <s.FileContainer>
-                                    <img
-                                        ref={ref}
-                                        width={90}
-                                        height={90}
-                                        src={require('./photo.jpg')}
-                                        onMouseOver={onMouseOverImage}
-                                        onMouseLeave={onMoustOutImage}
-                                    ></img>
-                                    <br /> <s.FileName>a</s.FileName>
-                                </s.FileContainer>
-                                <s.FileContainer>
-                                    <img
-                                        ref={ref}
-                                        width={90}
-                                        height={90}
-                                        src={require('./photo.jpg')}
-                                        onMouseOver={onMouseOverImage}
-                                        onMouseLeave={onMoustOutImage}
-                                    ></img>
-                                </s.FileContainer>
-                                <s.FileContainer>
-                                    <img
-                                        ref={ref}
-                                        width={90}
-                                        height={90}
-                                        src={require('./photo.jpg')}
-                                        onMouseOver={onMouseOverImage}
-                                        onMouseLeave={onMoustOutImage}
-                                    ></img>
-                                </s.FileContainer>
-                                <s.FileContainer>
-                                    <img width={90} height={90} src={require('./photo.jpg')}></img>
-                                </s.FileContainer>
-                                <s.FileContainer>
-                                    <img width={90} height={90} src={require('./photo.jpg')}></img>
-                                </s.FileContainer>
-                                <s.FileContainer>
-                                    <img width={90} height={90} src={require('./photo.jpg')}></img>
-                                </s.FileContainer>
-                                <s.FileContainer>
-                                    <img width={90} height={90} src={require('./photo.jpg')}></img>
-                                </s.FileContainer>
-                                <s.FileContainer>
-                                    <img width={90} height={90} src={require('./photo.jpg')}></img>
-                                </s.FileContainer>
-                                <s.FileContainer>
-                                    <img width={90} height={90} src={require('./photo.jpg')}></img>
-                                </s.FileContainer>
-                                <s.FileContainer>
-                                    <img width={90} height={90} src={require('./photo.jpg')}></img>
-                                </s.FileContainer>
-                                <s.FileContainer>
-                                    <img width={90} height={90} src={require('./photo.jpg')}></img>
-                                </s.FileContainer>
-                                <s.FileContainer>
-                                    <img width={90} height={90} src={require('./photo.jpg')}></img>
-                                </s.FileContainer>
-
-                                <s.FileContainer>
-                                    <img width={90} height={90} src={require('./photo.jpg')}></img>
-                                </s.FileContainer>
-                                <s.FileContainer>
-                                    <img width={90} height={90} src={require('./photo.jpg')}></img>
-                                </s.FileContainer>
-                                <s.FileContainer>
-                                    <img width={90} height={90} src={require('./photo.jpg')}></img>
-                                </s.FileContainer>
-                                <s.FileContainer>
-                                    <img width={90} height={90} src={require('./photo.jpg')}></img>
-                                </s.FileContainer>
-                                <s.FileContainer>
-                                    <img width={90} height={90} src={require('./photo.jpg')}></img>
-                                </s.FileContainer> */}
+                                      ))
+                                    : null}
                             </>
                         )}
                     </s.FileListContainer>

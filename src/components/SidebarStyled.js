@@ -57,6 +57,14 @@ export const SideBody = styled.div`
     height: 100%;
 `;
 
+export const LogoutArea = styled.div`
+  
+  width: 100%;
+  padding-top: 20px;
+  padding-right: 20px;
+  text-align: right;
+`;
+
 export const ProfileBlock = styled.div`
   text-align: center;
   padding-top: 2rem;

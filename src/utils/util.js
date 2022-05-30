@@ -1,5 +1,8 @@
 import { atom } from 'recoil';
 import { recoilPersist } from 'recoil-persist';
+import { useRecoilValue } from 'recoil';
+import { useNavigate } from 'react-router-dom';
+import { authApi } from '../api/api';
 
 export const textLengthOverCut = ({ ...props }) => {
     let { txt, len, lastTxt } = props;
@@ -16,6 +19,8 @@ export const textLengthOverCut = ({ ...props }) => {
     }
     return txt;
 };
+
+
 
 export const getFileType = (filename) => {
     let fileLen = filename.length;
@@ -48,5 +53,11 @@ export const access_token = atom({
 export const user_id = atom({
     key: 'user_id',
     default: '',
+    effects_UNSTABLE: [persistAtom]
+})
+
+export const updated = atom({
+    key: 'updated',
+    default: 0,
     effects_UNSTABLE: [persistAtom]
 })

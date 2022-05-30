@@ -3,7 +3,7 @@ import DirectoryPresenter from './DirectoryPresenter';
 import * as recoilItem from '../../utils/util';
 import { fileApi } from '../../api/api';
 import { useRecoilValue } from 'recoil';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import {saveAs} from 'file-saver'
 import axios from 'axios';
 
@@ -11,6 +11,7 @@ const DirectoryContainer = () => {
     const [isDragging, setIsDragging] = useState(false);
     const [files, setFiles] = useState([]);
     const location = useLocation();
+    const navigate = useNavigate();
     const [isLoading, setIsLoading] = useState(true);
     // 각 선택했던 파일들의 고유값 id
 
@@ -22,9 +23,14 @@ const DirectoryContainer = () => {
     const [filePath, setFilePath] = useState(path);
     const [fileList, setFileList] = useState([]);
     const [folderList, setFolderList] = useState([]);
+
     const fetchData = async() => {
+        if(!id_token) {
+            navigate('/');
+            return;
+        }
         let res = null;
-        
+        setIsLoading(true);
         try{
             res = await fileApi.getFileList(user_id, filePath, id_token);
         }
@@ -33,13 +39,15 @@ const DirectoryContainer = () => {
             if(res && res.statusText === "OK"){
                 setFileList(res.data.files);
                 setFolderList(res.data.folders);
+                console.log(res);
                 setIsLoading(false);
             }
+            
         }
     }
     useEffect(() => {
         fetchData();
-    }, []);
+    }, [filePath]);
 
     // 드래그 이벤트를 감지하는 ref 참조변수 (label 태그에 들어갈 예정)
     const dragRef = useRef(null);
@@ -58,7 +66,6 @@ const DirectoryContainer = () => {
     const handleDragOver = useCallback((e) => {
         e.preventDefault();
         e.stopPropagation();
-        console.log('drag');
         if (e.dataTransfer.files) {
         setIsDragging(true);
         }
@@ -80,9 +87,9 @@ const DirectoryContainer = () => {
             });
             formData.append('user_id', user_id);
             formData.append('IdToken', id_token);
-            formData.append('file_path', filePath);
+            formData.append('file_path', filePath === "" ? filePath : filePath+"/");
             formData.append('compression', 'false');
-            formData.append('isAudio', 'false');
+            formData.append('isAudio', 'false'); 
             formData.append('enctype', 'multipart/form-data');
             let res = null;
             try{
@@ -90,9 +97,7 @@ const DirectoryContainer = () => {
             } catch(e){}
             finally{
                 if(res && res.data === "Upload succeed"){
-                } else {
-                    alert('업로드에 실패하였습니다');
-                }
+                } 
                 setIsLoading(false);
             }
             // axios({
@@ -224,6 +229,7 @@ const DirectoryContainer = () => {
             fileList={fileList}
             folderList={folderList}
             filePath={filePath}
+            setFilePath={setFilePath}
             isLoading={isLoading}
             downloadFile={downloadFile}
             fileUpload={fileUpload}

@@ -1,11 +1,14 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import * as s from './SidebarStyled';
 import { IoPersonCircle } from 'react-icons/io5';
 import { BiX } from 'react-icons/bi';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import { useRecoilValue } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import * as recoilItem from '../utils/util';
+import { authApi } from '../api/api';
+import {FiLogOut} from 'react-icons/fi';
+
 const StyledLink = styled(Link)`
     text-decoration: none;
 
@@ -19,13 +22,40 @@ const StyledLink = styled(Link)`
 `;
 
 
-const Sidebar = ({NavVisible}) => {
+const Sidebar = ({...props}) => {
+    const {NavVisible, setNavVisible} = props;
     const userId = useRecoilValue(recoilItem.user_id);
+    const idToken = useRecoilValue(recoilItem.id_token);
+    const accessToken = useRecoilValue(recoilItem.access_token);
+    const [updated, setUpdated] = useRecoilState(recoilItem.updated);
+
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        if(!userId && !idToken){
+            setNavVisible(false);
+        }
+    }, [updated, NavVisible]);
+
+    const onLogout = () => {
+        try{
+            localStorage.clear();
+        } catch(e){}
+        finally{
+             setNavVisible(false);
+             setUpdated(updated + 1);
+             alert('로그아웃 되었습니다');
+             window.location.href = '/';
+        }
+    }
 
     return (
-        <>
+        idToken ? 
             <s.DropDownMenuCorp NavVisible={NavVisible}>
                 <s.SideHeader>
+                    <s.LogoutArea>
+                        <FiLogOut size={30} style={{cursor:'pointer'}} onClick ={onLogout}/>
+                    </s.LogoutArea>
                     <s.SideMenuButton>
                         <BiX color="white" size="30" />
                     </s.SideMenuButton>
@@ -61,7 +91,7 @@ const Sidebar = ({NavVisible}) => {
                     </s.DropDownBlock>
                 </s.SideBody>
             </s.DropDownMenuCorp>
-        </>
+        : null
     );
 }
 
