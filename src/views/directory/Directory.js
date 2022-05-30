@@ -9,6 +9,7 @@ const DirectoryContainer = () => {
     const [isDragging, setIsDragging] = useState(false);
     const [files, setFiles] = useState([]);
     const location = useLocation();
+    const [isLoading, setIsLoading] = useState(true);
     // 각 선택했던 파일들의 고유값 id
 
     const access_token = useRecoilValue(recoilItem.access_token);
@@ -30,6 +31,7 @@ const DirectoryContainer = () => {
             if(res && res.statusText === "OK"){
                 setFileList(res.data.files);
                 setFolderList(res.data.folders);
+                setIsLoading(false);
             }
         }
     }
@@ -94,7 +96,6 @@ const DirectoryContainer = () => {
     );
 
     const initDragEvents = useCallback(() => {
-        // 앞서 말했던 4개의 이벤트에 Listener를 등록합니다. (마운트 될때)
         
         if (dragRef.current !== null) {
         dragRef.current.addEventListener("dragenter", handleDragIn);
@@ -105,8 +106,7 @@ const DirectoryContainer = () => {
     }, [handleDragIn, handleDragOut, handleDragOver, handleDrop]);
 
     const resetDragEvents = useCallback(() => {
-        // 앞서 말했던 4개의 이벤트에 Listener를 삭제합니다. (언마운트 될때)
-        
+
         if (dragRef.current !== null) {
         dragRef.current.removeEventListener("dragenter", handleDragIn);
         dragRef.current.removeEventListener("dragleave", handleDragOut);
@@ -114,7 +114,6 @@ const DirectoryContainer = () => {
         dragRef.current.removeEventListener("drop", handleDrop);
         }
     }, [handleDragIn, handleDragOut, handleDragOver, handleDrop]);
-
     
 
     useEffect(() => {
@@ -122,7 +121,36 @@ const DirectoryContainer = () => {
     
         return () => resetDragEvents();
     }, [initDragEvents, resetDragEvents]);
-    console.log(fileList);
+
+
+    const fileUpload = async() =>{
+
+        if(files.length === 0) return;
+        setIsLoading(true);
+        let formData ={
+            files: files,
+            user_id: user_id,
+            IdToken: id_token,
+            file_path: filePath,
+            compression: false,
+            isAudio: false,
+        }
+        console.log(formData);
+        let res = null;
+        try{
+            res = await fileApi.upload(formData);
+        } catch(e){}
+        finally{
+            console.log(res);
+            setFiles([]);
+            fetchData();
+        }
+    };
+
+    useEffect(() => {
+        fileUpload();
+    }, [files]);
+
     return (
         <DirectoryPresenter
             isDragging={isDragging}
@@ -130,6 +158,8 @@ const DirectoryContainer = () => {
             onChangeFiles={onChangeFiles}
             fileList={fileList}
             folderList={folderList}
+            filePath={filePath}
+            isLoading = {isLoading}
         />
     );
 }

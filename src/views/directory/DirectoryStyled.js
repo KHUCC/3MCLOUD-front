@@ -21,14 +21,47 @@ export const Container = styled.div`
     text-align: center;
 `;
 
-export const FileGroupTitle = styled.div`
+export const FileListHeader = styled.div`
     flex: 1;
-    border-bottom: 2px solid #6dc4db;
     padding-top: 20px;
+    display: flex;
+    
+    
+`;
+
+export const TitleDescription = styled.div`
+    flex:1;
     text-align: left;
     font-size: 30px;
     color: #6dc4db;
     font-weight: bold;
+`;
+
+export const UploadButtonArea =styled.div`
+    flex: 1;
+    text-align: right;
+`;
+
+export const UploadButton = styled.label`
+    width: 100%;
+    height: 100%;
+    background-color: #6dc4db;
+    padding: 10px 10px;
+    border-radius: 5px;
+    color: white;
+    font-weight: bold;
+    font-size: 16px;
+    &:hover{
+        opacity: 0.7;
+    }
+`;
+
+export const SpinnerArea = styled.div`
+    display: flex;
+    width: 100%;
+    height: 100%;
+    justify-content: center;
+    align-items: center;
 `;
 
 export const FileListContainer = styled.div`
@@ -47,6 +80,7 @@ export const FileDescription = styled.div`
     width: 100%;
     background-color: #6dc4db;
     display: flex;
+    padding-left: 10px;
 `;
 
 export const DescriptionDrop = styled.div`
@@ -66,10 +100,28 @@ export const DescriptionDropMessage = styled.div`
     font-weight: bolder;
 `;
 
-export const ImageContainer = styled.span`
-    width: 100px;
-    height: 100px;
-    padding: 5px;
+export const FileContainer = styled.span`
+    width: 130px;
+    height: 110px;
+    margin: 10px;
+    border-radius: 10px;
+    display: inline-block;
+    text-align: center;
+    &:hover {
+        background-color: #6dc4db;
+        opacity: 0.5;
+    }
+    
+`;
+
+export const FileName = styled.span`
+    text-align: center;
+    padding-left: 3px;
+    width: 100%;
+`;
+
+export const FileIcon = styled.span`
+    border: 1px solid gray;
 `;
 
 export const ImageTitle = styled.div`

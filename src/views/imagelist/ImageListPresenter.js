@@ -6,7 +6,7 @@ const ImageListPresenter = ({...props}) => {
     const [x, setX] = useState(null);
     const [y, setY] = useState(null);
     const [targetImage, setTargetImage] = useState("");
-
+    const {imageList} = props;
     const onMouseOverImage = (e) => {
 
         setX(e.target.getBoundingClientRect().x+100);
@@ -40,79 +40,24 @@ const ImageListPresenter = ({...props}) => {
                             multiple={true}
                             onChange={props.onChangeFiles}
                         />
-                        <s.ImageContainer>
-                            <img
-                                ref={ref}
-                                width={90}
-                                height={90}
-                                src={require('./photo.jpg')}
-                                onMouseOver={onMouseOverImage}
-                                onMouseLeave={onMoustOutImage}
-                            ></img>
-                        </s.ImageContainer>
-                        <s.ImageContainer>
-                            <img
-                                ref={ref}
-                                width={90}
-                                height={90}
-                                src={require('./photo.jpg')}
-                                onMouseOver={onMouseOverImage}
-                                onMouseLeave={onMoustOutImage}
-                            ></img>
-                        </s.ImageContainer>
-                        <s.ImageContainer>
-                            <img
-                                ref={ref}
-                                width={90}
-                                height={90}
-                                src={require('./photo.jpg')}
-                                onMouseOver={onMouseOverImage}
-                                onMouseLeave={onMoustOutImage}
-                            ></img>
-                        </s.ImageContainer>
-                        <s.ImageContainer>
-                            <img width={90} height={90} src={require('./photo.jpg')}></img>
-                        </s.ImageContainer>
-                        <s.ImageContainer>
-                            <img width={90} height={90} src={require('./photo.jpg')}></img>
-                        </s.ImageContainer>
-                        <s.ImageContainer>
-                            <img width={90} height={90} src={require('./photo.jpg')}></img>
-                        </s.ImageContainer>
-                        <s.ImageContainer>
-                            <img width={90} height={90} src={require('./photo.jpg')}></img>
-                        </s.ImageContainer>
-                        <s.ImageContainer>
-                            <img width={90} height={90} src={require('./photo.jpg')}></img>
-                        </s.ImageContainer>
-                        <s.ImageContainer>
-                            <img width={90} height={90} src={require('./photo.jpg')}></img>
-                        </s.ImageContainer>
-                        <s.ImageContainer>
-                            <img width={90} height={90} src={require('./photo.jpg')}></img>
-                        </s.ImageContainer>
-                        <s.ImageContainer>
-                            <img width={90} height={90} src={require('./photo.jpg')}></img>
-                        </s.ImageContainer>
-                        <s.ImageContainer>
-                            <img width={90} height={90} src={require('./photo.jpg')}></img>
-                        </s.ImageContainer>
-
-                        <s.ImageContainer>
-                            <img width={90} height={90} src={require('./photo.jpg')}></img>
-                        </s.ImageContainer>
-                        <s.ImageContainer>
-                            <img width={90} height={90} src={require('./photo.jpg')}></img>
-                        </s.ImageContainer>
-                        <s.ImageContainer>
-                            <img width={90} height={90} src={require('./photo.jpg')}></img>
-                        </s.ImageContainer>
-                        <s.ImageContainer>
-                            <img width={90} height={90} src={require('./photo.jpg')}></img>
-                        </s.ImageContainer>
-                        <s.ImageContainer>
-                            <img width={90} height={90} src={require('./photo.jpg')}></img>
-                        </s.ImageContainer>
+                        {imageList.length === 0 ? (
+                            <s.NoImageDescription>
+                                회원님의 클라우드에 이미지 파일이 존재하지 않습니다!
+                            </s.NoImageDescription>
+                        ) : (
+                            imageList.map((item, index) => (
+                                <s.ImageContainer>
+                                    <img
+                                        ref={ref}
+                                        width={90}
+                                        height={90}
+                                        src={item}
+                                        onMouseOver={onMouseOverImage}
+                                        onMouseLeave={onMoustOutImage}
+                                    ></img>
+                                </s.ImageContainer>
+                            ))
+                        )}
                     </s.FileListContainer>
                 </s.Container>
             </s.Wrapper>

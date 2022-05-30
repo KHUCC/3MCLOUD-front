@@ -1,6 +1,9 @@
 import React, {useRef, useState} from 'react';
 import * as s from './DirectoryStyled';
 import {getFileType} from '../../utils/util';
+import { AiOutlineFile } from 'react-icons/ai';
+import { textLengthOverCut } from '../../utils/util';
+import { SpinnerCircular } from 'spinners-react';
 
 const DirectoryPresenter = ({...props}) => {
     const ref = useRef();
@@ -22,7 +25,7 @@ const DirectoryPresenter = ({...props}) => {
         setTargetImage("");
     }
 
-    const {fileList, folderList} = props;
+    const { fileList, folderList, filePath, isLoading } = props;
 
     return (
         <>
@@ -33,107 +36,115 @@ const DirectoryPresenter = ({...props}) => {
             ) : null}
             <s.Wrapper>
                 <s.Container>
-                    <s.FileGroupTitle>내 디렉토리 - 이미지</s.FileGroupTitle>
-                    <s.FileDescription>asdasdas</s.FileDescription>
+                    <s.FileListHeader>
+                        <s.TitleDescription> 내 디렉토리</s.TitleDescription>
+                        <s.UploadButtonArea>
+                            <input type="file" id="fileUpload" style={{ display: 'none' }} multiple={true} onChange={props.onChangeFiles} />
+                            <s.UploadButton htmlFor = "fileUpload">파일 업로드</s.UploadButton>
+                        </s.UploadButtonArea>
+                    </s.FileListHeader>
+                    <s.FileDescription>{'/' + filePath}</s.FileDescription>
                     <s.FileListContainer ref={props.dragRef} isDragging={props.isDragging} htmlFor="fileupload">
-                        <input
-                            type="file"
-                            id="fileUpload"
-                            style={{ display: 'none', width: '100%', height: '100%' }}
-                            multiple={true}
-                            onChange={props.onChangeFiles}
-                        />
-                        {folderList.length === 0 ? null : null}
-                        {fileList.length === 0
-                            ? null
-                            : fileList.map((item, index) =>
-                                  getFileType(item) === 'photo' ? (
-                                    //   <s.ImageContainer>
-                                    //       <img
-                                    //           ref={ref}
-                                    //           width={90}
-                                    //           height={90}
-                                    //           src={item}
-                                    //           onMouseOver={onMouseOverImage}
-                                    //           onMouseLeave={onMoustOutImage}
-                                    //       ></img>
-                                    //   </s.ImageContainer>
-                                console.log(item)
-                                  ) : null
-                              )}
-                        <s.ImageContainer>
-                            <img
-                                ref={ref}
-                                width={90}
-                                height={90}
-                                src={require('./photo.jpg')}
-                                onMouseOver={onMouseOverImage}
-                                onMouseLeave={onMoustOutImage}
-                            ></img>
-                        </s.ImageContainer>
-                        <s.ImageContainer>
-                            <img
-                                ref={ref}
-                                width={90}
-                                height={90}
-                                src={require('./photo.jpg')}
-                                onMouseOver={onMouseOverImage}
-                                onMouseLeave={onMoustOutImage}
-                            ></img>
-                        </s.ImageContainer>
-                        <s.ImageContainer>
-                            <img
-                                ref={ref}
-                                width={90}
-                                height={90}
-                                src={require('./photo.jpg')}
-                                onMouseOver={onMouseOverImage}
-                                onMouseLeave={onMoustOutImage}
-                            ></img>
-                        </s.ImageContainer>
-                        <s.ImageContainer>
-                            <img width={90} height={90} src={require('./photo.jpg')}></img>
-                        </s.ImageContainer>
-                        <s.ImageContainer>
-                            <img width={90} height={90} src={require('./photo.jpg')}></img>
-                        </s.ImageContainer>
-                        <s.ImageContainer>
-                            <img width={90} height={90} src={require('./photo.jpg')}></img>
-                        </s.ImageContainer>
-                        <s.ImageContainer>
-                            <img width={90} height={90} src={require('./photo.jpg')}></img>
-                        </s.ImageContainer>
-                        <s.ImageContainer>
-                            <img width={90} height={90} src={require('./photo.jpg')}></img>
-                        </s.ImageContainer>
-                        <s.ImageContainer>
-                            <img width={90} height={90} src={require('./photo.jpg')}></img>
-                        </s.ImageContainer>
-                        <s.ImageContainer>
-                            <img width={90} height={90} src={require('./photo.jpg')}></img>
-                        </s.ImageContainer>
-                        <s.ImageContainer>
-                            <img width={90} height={90} src={require('./photo.jpg')}></img>
-                        </s.ImageContainer>
-                        <s.ImageContainer>
-                            <img width={90} height={90} src={require('./photo.jpg')}></img>
-                        </s.ImageContainer>
+                        {isLoading ? (
+                            <s.SpinnerArea>
+                                <SpinnerCircular enabled={isLoading} size={100} color={'#6dc4db'} />
+                            </s.SpinnerArea>
+                        ) : (
+                            <>
+                                <input
+                                    type="file"
+                                    id="fileUpload"
+                                    style={{ display: 'none', width: '100%', height: '100%' }}
+                                    multiple={true}
+                                    onChange={props.onChangeFiles}
+                                />
 
-                        <s.ImageContainer>
-                            <img width={90} height={90} src={require('./photo.jpg')}></img>
-                        </s.ImageContainer>
-                        <s.ImageContainer>
-                            <img width={90} height={90} src={require('./photo.jpg')}></img>
-                        </s.ImageContainer>
-                        <s.ImageContainer>
-                            <img width={90} height={90} src={require('./photo.jpg')}></img>
-                        </s.ImageContainer>
-                        <s.ImageContainer>
-                            <img width={90} height={90} src={require('./photo.jpg')}></img>
-                        </s.ImageContainer>
-                        <s.ImageContainer>
-                            <img width={90} height={90} src={require('./photo.jpg')}></img>
-                        </s.ImageContainer>
+                                {folderList.length === 0 ? null : null}
+                                {fileList.length === 0
+                                    ? null
+                                    : fileList.map((item, index) => (
+                                          <s.FileContainer>
+                                              <AiOutlineFile size={90} />
+                                              <br />
+                                              <s.FileName>{textLengthOverCut({ txt: item, len: 10, lastTxt: '...' })}</s.FileName>
+                                          </s.FileContainer>
+                                      ))}
+                                {/* <s.FileContainer>
+                                    <img
+                                        ref={ref}
+                                        width={90}
+                                        height={90}
+                                        src={require('./photo.jpg')}
+                                        onMouseOver={onMouseOverImage}
+                                        onMouseLeave={onMoustOutImage}
+                                    ></img>
+                                    <br /> <s.FileName>a</s.FileName>
+                                </s.FileContainer>
+                                <s.FileContainer>
+                                    <img
+                                        ref={ref}
+                                        width={90}
+                                        height={90}
+                                        src={require('./photo.jpg')}
+                                        onMouseOver={onMouseOverImage}
+                                        onMouseLeave={onMoustOutImage}
+                                    ></img>
+                                </s.FileContainer>
+                                <s.FileContainer>
+                                    <img
+                                        ref={ref}
+                                        width={90}
+                                        height={90}
+                                        src={require('./photo.jpg')}
+                                        onMouseOver={onMouseOverImage}
+                                        onMouseLeave={onMoustOutImage}
+                                    ></img>
+                                </s.FileContainer>
+                                <s.FileContainer>
+                                    <img width={90} height={90} src={require('./photo.jpg')}></img>
+                                </s.FileContainer>
+                                <s.FileContainer>
+                                    <img width={90} height={90} src={require('./photo.jpg')}></img>
+                                </s.FileContainer>
+                                <s.FileContainer>
+                                    <img width={90} height={90} src={require('./photo.jpg')}></img>
+                                </s.FileContainer>
+                                <s.FileContainer>
+                                    <img width={90} height={90} src={require('./photo.jpg')}></img>
+                                </s.FileContainer>
+                                <s.FileContainer>
+                                    <img width={90} height={90} src={require('./photo.jpg')}></img>
+                                </s.FileContainer>
+                                <s.FileContainer>
+                                    <img width={90} height={90} src={require('./photo.jpg')}></img>
+                                </s.FileContainer>
+                                <s.FileContainer>
+                                    <img width={90} height={90} src={require('./photo.jpg')}></img>
+                                </s.FileContainer>
+                                <s.FileContainer>
+                                    <img width={90} height={90} src={require('./photo.jpg')}></img>
+                                </s.FileContainer>
+                                <s.FileContainer>
+                                    <img width={90} height={90} src={require('./photo.jpg')}></img>
+                                </s.FileContainer>
+
+                                <s.FileContainer>
+                                    <img width={90} height={90} src={require('./photo.jpg')}></img>
+                                </s.FileContainer>
+                                <s.FileContainer>
+                                    <img width={90} height={90} src={require('./photo.jpg')}></img>
+                                </s.FileContainer>
+                                <s.FileContainer>
+                                    <img width={90} height={90} src={require('./photo.jpg')}></img>
+                                </s.FileContainer>
+                                <s.FileContainer>
+                                    <img width={90} height={90} src={require('./photo.jpg')}></img>
+                                </s.FileContainer>
+                                <s.FileContainer>
+                                    <img width={90} height={90} src={require('./photo.jpg')}></img>
+                                </s.FileContainer> */}
+                            </>
+                        )}
                     </s.FileListContainer>
                 </s.Container>
             </s.Wrapper>

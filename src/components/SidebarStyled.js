@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled from 'styled-components'; 
 
 export const DropDownMenuCorp = styled.div`
     margin-top: 100px;
@@ -63,7 +63,7 @@ export const ProfileBlock = styled.div`
   padding-bottom: 2rem;
 `;
 export const ProfileUserName = styled.div`
-    font-size: 15px;
+    font-size: 18px;
     color: #1e2f68;
     font-weight: bold;
 `;

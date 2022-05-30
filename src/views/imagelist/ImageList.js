@@ -1,7 +1,29 @@
 import React, {useEffect, useCallback, useRef, useState} from 'react';
 import ImageListPresenter from './ImageListPresenter';
-
+import { useRecoilValue } from 'recoil';
+import * as recoilItem from '../../utils/util';
+import { fileApi } from '../../api/api';
 const ImageListContainer = () => {
+    const [imageList, setImageList] = useState([])
+    const idToken = useRecoilValue(recoilItem.id_token);
+    const userId = useRecoilValue(recoilItem.user_id);
+
+    const fetchData = async() => {
+        let res = null;
+        try{
+            res = await fileApi.getImageList(userId, idToken);
+        } catch(e){}
+        finally{
+            if(res && res.statusText === "OK"){
+                setImageList(res.data.image_files);
+            }
+        }
+    }
+
+    useEffect(() => {
+        fetchData();
+    }, []);
+
     const [isDragging, setIsDragging] = useState(false);
     const [files, setFiles] = useState([]);
     // 각 선택했던 파일들의 고유값 id
@@ -90,9 +112,8 @@ const ImageListContainer = () => {
     
         return () => resetDragEvents();
     }, [initDragEvents, resetDragEvents]);
-    console.log(files);
     return(
-        <ImageListPresenter isDragging = {isDragging} dragRef = {dragRef} onChangeFiles = {onChangeFiles}/>
+        <ImageListPresenter isDragging = {isDragging} dragRef = {dragRef} onChangeFiles = {onChangeFiles} imageList = {imageList}/>
     )
 }
 

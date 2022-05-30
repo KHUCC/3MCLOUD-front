@@ -4,7 +4,8 @@ import { IoPersonCircle } from 'react-icons/io5';
 import { BiX } from 'react-icons/bi';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
-
+import { useRecoilValue } from 'recoil';
+import * as recoilItem from '../utils/util';
 const StyledLink = styled(Link)`
     text-decoration: none;
 
@@ -16,7 +17,10 @@ const StyledLink = styled(Link)`
         text-decoration: none;
     }
 `;
+
+
 const Sidebar = ({NavVisible}) => {
+    const userId = useRecoilValue(recoilItem.user_id);
 
     return (
         <>
@@ -30,8 +34,8 @@ const Sidebar = ({NavVisible}) => {
                     {/* 유저 프로필 영역 */}
                     <s.ProfileBlock>
                         <IoPersonCircle size="50" color="#1E2F68" />
-                        <s.ProfileUserName>USER</s.ProfileUserName>
-                        <s.ProfileUserDept>사용 가능 공간: 1.50 GB / 4.00GB</s.ProfileUserDept>
+                        <s.ProfileUserName>{userId}</s.ProfileUserName>
+                        {/* <s.ProfileUserDept>사용 가능 공간: 1.50 GB / 4.00GB</s.ProfileUserDept> */}
                     </s.ProfileBlock>
 
                     {/* 메뉴 영역 */}

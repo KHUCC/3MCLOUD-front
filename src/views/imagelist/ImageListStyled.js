@@ -41,6 +41,17 @@ export const FileListContainer = styled.div`
     background-color: ${(props) => props.isDragging ? '#e2e2e2':'white'};
 `;
 
+export const NoImageDescription = styled.div`
+    width: 100%;
+    height: 100%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    color: #6dc4db;
+    font-weight: bold;
+`;
 
 export const FileDescription = styled.div`
     height: 30px;
@@ -65,12 +76,19 @@ export const DescriptionDropMessage = styled.div`
     font-size: 30px;
     font-weight: bolder;
 `;
-
+export const ImageWrap = styled.span`
+    display: inline;
+`;
 export const ImageContainer = styled.span`
     width: 100px;
     height: 100px;
-    padding: 5px;
+    padding-left: 10px;
+    padding-right: 10px;
 `;
+
+export const fileDescription = styled.span`
+
+`
 
 export const ImageTitle = styled.div`
     font-size: 10px;
