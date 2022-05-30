@@ -3,13 +3,23 @@ import ImageListPresenter from './ImageListPresenter';
 import { useRecoilValue } from 'recoil';
 import * as recoilItem from '../../utils/util';
 import { fileApi } from '../../api/api';
+import { saveAs } from 'file-saver';
 const ImageListContainer = () => {
     const [imageList, setImageList] = useState([])
     const idToken = useRecoilValue(recoilItem.id_token);
     const userId = useRecoilValue(recoilItem.user_id);
+    const [isLoading, setIsLoading] = useState(true);
+
+
+    const downloadFile = async (fileName) => {
+        let newFileName = fileName.split('/');
+        newFileName = newFileName[fileName.length - 1];
+        saveAs(fileName, newFileName);
+    };
 
     const fetchData = async() => {
         let res = null;
+        setIsLoading(true);
         try{
             res = await fileApi.getImageList(userId, idToken);
         } catch(e){}
@@ -17,6 +27,7 @@ const ImageListContainer = () => {
             if(res && res.statusText === "OK"){
                 setImageList(res.data.image_files);
             }
+            setIsLoading(false);
         }
     }
 
@@ -24,97 +35,9 @@ const ImageListContainer = () => {
         fetchData();
     }, []);
 
-    const [isDragging, setIsDragging] = useState(false);
-    const [files, setFiles] = useState([]);
-    // 각 선택했던 파일들의 고유값 id
-    const fileId = useRef(0);
 
-    // 드래그 이벤트를 감지하는 ref 참조변수 (label 태그에 들어갈 예정)
-    const dragRef = useRef(null);
-    const handleDragIn = useCallback((e) => {
-        e.preventDefault();
-        e.stopPropagation();
-    }, []);
-
-    const handleDragOut = useCallback((e) => {
-        e.preventDefault();
-        e.stopPropagation();
-
-        setIsDragging(false);
-    }, []);
-
-    const handleDragOver = useCallback((e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        console.log('drag');
-        if (e.dataTransfer.files) {
-        setIsDragging(true);
-        }
-    }, []);
-    const onChangeFiles = useCallback(
-        (e) => {
-            let selectFiles = [];
-            let tempFiles = files;
-            if (e.type === 'drop') {
-                selectFiles = e.dataTransfer.files;
-            } else {
-                selectFiles = e.target.files;
-            }
-            Array.from(selectFiles).forEach((file) => {
-                tempFiles = [
-                    ...tempFiles,
-                    {
-                        id: (fileId.current += 1),
-                        object: file,
-                    },
-                ];
-            });
-            setFiles(tempFiles);
-        },
-        [files]
-    );
-
-    const handleDrop = useCallback(
-        (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-
-        onChangeFiles(e);
-        setIsDragging(false);
-        },
-        [onChangeFiles]
-    );
-
-    const initDragEvents = useCallback(() => {
-        // 앞서 말했던 4개의 이벤트에 Listener를 등록합니다. (마운트 될때)
-        
-        if (dragRef.current !== null) {
-        dragRef.current.addEventListener("dragenter", handleDragIn);
-        dragRef.current.addEventListener("dragleave", handleDragOut);
-        dragRef.current.addEventListener("dragover", handleDragOver);
-        dragRef.current.addEventListener("drop", handleDrop);
-        }
-    }, [handleDragIn, handleDragOut, handleDragOver, handleDrop]);
-
-    const resetDragEvents = useCallback(() => {
-        // 앞서 말했던 4개의 이벤트에 Listener를 삭제합니다. (언마운트 될때)
-        
-        if (dragRef.current !== null) {
-        dragRef.current.removeEventListener("dragenter", handleDragIn);
-        dragRef.current.removeEventListener("dragleave", handleDragOut);
-        dragRef.current.removeEventListener("dragover", handleDragOver);
-        dragRef.current.removeEventListener("drop", handleDrop);
-        }
-    }, [handleDragIn, handleDragOut, handleDragOver, handleDrop]);
-
-    useEffect(() => {
-        initDragEvents();
     
-        return () => resetDragEvents();
-    }, [initDragEvents, resetDragEvents]);
-    return(
-        <ImageListPresenter isDragging = {isDragging} dragRef = {dragRef} onChangeFiles = {onChangeFiles} imageList = {imageList}/>
-    )
+    return <ImageListPresenter imageList={imageList} isLoading={isLoading} downloadFile={downloadFile} />;
 }
 
 export default ImageListContainer;

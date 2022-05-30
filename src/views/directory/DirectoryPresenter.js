@@ -1,7 +1,7 @@
 import React, {useRef, useState} from 'react';
 import * as s from './DirectoryStyled';
 import {getFileType} from '../../utils/util';
-import { AiOutlineFile } from 'react-icons/ai';
+import { BsFileEarmark } from 'react-icons/bs';
 import { textLengthOverCut } from '../../utils/util';
 import { SpinnerCircular } from 'spinners-react';
 
@@ -11,6 +11,7 @@ const DirectoryPresenter = ({...props}) => {
     const [y, setY] = useState(null);
     const [targetImage, setTargetImage] = useState("");
 
+    const [target, setTarget] = useState('');
     const onMouseOverImage = (e) => {
 
         setX(e.target.getBoundingClientRect().x+100);
@@ -25,8 +26,9 @@ const DirectoryPresenter = ({...props}) => {
         setTargetImage("");
     }
 
-    const { fileList, folderList, filePath, isLoading } = props;
+    
 
+    const { fileList, folderList, filePath, isLoading, downloadFile, onChangeFiles } = props;
     return (
         <>
             {x ? (
@@ -39,11 +41,11 @@ const DirectoryPresenter = ({...props}) => {
                     <s.FileListHeader>
                         <s.TitleDescription> 내 디렉토리</s.TitleDescription>
                         <s.UploadButtonArea>
-                            <input type="file" id="fileUpload" style={{ display: 'none' }} multiple={true} onChange={props.onChangeFiles} />
-                            <s.UploadButton htmlFor = "fileUpload">파일 업로드</s.UploadButton>
+                            <input type="file" id="fileUpload" style={{ display: 'none' }} multiple={true} onChange={onChangeFiles} />
+                            <s.UploadButton htmlFor="fileUpload">파일 업로드</s.UploadButton>
                         </s.UploadButtonArea>
                     </s.FileListHeader>
-                    <s.FileDescription>{'/' + filePath}</s.FileDescription>
+                    <s.FileDescription>{'/' + filePath + target}</s.FileDescription>
                     <s.FileListContainer ref={props.dragRef} isDragging={props.isDragging} htmlFor="fileupload">
                         {isLoading ? (
                             <s.SpinnerArea>
@@ -63,10 +65,15 @@ const DirectoryPresenter = ({...props}) => {
                                 {fileList.length === 0
                                     ? null
                                     : fileList.map((item, index) => (
-                                          <s.FileContainer>
-                                              <AiOutlineFile size={90} />
+                                          <s.FileContainer
+                                              key={index}
+                                              onDoubleClick={() => downloadFile(item)}
+                                              onMouseOver={() => setTarget(item)}
+                                              onMouseLeave={() => setTarget('')}
+                                          >
+                                              <BsFileEarmark size={90} />
                                               <br />
-                                              <s.FileName>{textLengthOverCut({ txt: item, len: 10, lastTxt: '...' })}</s.FileName>
+                                              <s.FileName>{textLengthOverCut({ txt: item, len: 15, lastTxt: '...' })}</s.FileName>
                                           </s.FileContainer>
                                       ))}
                                 {/* <s.FileContainer>

@@ -70,6 +70,13 @@ export const DescriptionDrop = styled.div`
     width: 100%;
     height: 100%;
 `;
+export const SpinnerArea = styled.div`
+    display: flex;
+    width: 100%;
+    height: 100%;
+    justify-content: center;
+    align-items: center;
+`;
 
 export const DescriptionDropMessage = styled.div`
     color: white;
@@ -80,10 +87,14 @@ export const ImageWrap = styled.span`
     display: inline;
 `;
 export const ImageContainer = styled.span`
-    width: 100px;
-    height: 100px;
-    padding-left: 10px;
-    padding-right: 10px;
+    width: 130px;
+    height: 130px;
+    display: inline-block;
+    text-align: center;
+    border-radius: 8px;
+    background-color: #f0f0f0;
+    padding-top: 5px;
+    margin: 10px 10px;
 `;
 
 export const fileDescription = styled.span`

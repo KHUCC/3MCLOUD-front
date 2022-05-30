@@ -81,6 +81,7 @@ export const FileDescription = styled.div`
     background-color: #6dc4db;
     display: flex;
     padding-left: 10px;
+    padding-top: 10px;
 `;
 
 export const DescriptionDrop = styled.div`
@@ -102,8 +103,9 @@ export const DescriptionDropMessage = styled.div`
 
 export const FileContainer = styled.span`
     width: 130px;
-    height: 110px;
+    height: 120px;
     margin: 10px;
+    padding-top: 10px;
     border-radius: 10px;
     display: inline-block;
     text-align: center;

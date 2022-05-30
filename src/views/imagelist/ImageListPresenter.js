@@ -1,17 +1,21 @@
 import React, {useRef, useState} from 'react';
 import * as s from './ImageListStyled';
+import { SpinnerCircular } from 'spinners-react';
 
 const ImageListPresenter = ({...props}) => {
     const ref = useRef();
     const [x, setX] = useState(null);
     const [y, setY] = useState(null);
     const [targetImage, setTargetImage] = useState("");
-    const {imageList} = props;
-    const onMouseOverImage = (e) => {
-
+    const { imageList, downloadFile } = props;
+    const [target, setTarget] = useState('');
+    const onMouseOverImage = (e, item) => {
+        let newFileName = item.split('/');
+        newFileName = newFileName[newFileName.length - 1];
         setX(e.target.getBoundingClientRect().x+100);
         setY(e.target.getBoundingClientRect().y);
         setTargetImage(e.target.src);
+        setTarget(newFileName);
         
     }
 
@@ -19,7 +23,9 @@ const ImageListPresenter = ({...props}) => {
         setX(0);
         setY(0);
         setTargetImage("");
+        setTarget('');
     }
+
 
     return (
         <>
@@ -31,32 +37,39 @@ const ImageListPresenter = ({...props}) => {
             <s.Wrapper>
                 <s.Container>
                     <s.FileGroupTitle>내 디렉토리 - 이미지</s.FileGroupTitle>
-                    <s.FileDescription>asdasdas</s.FileDescription>
+                    <s.FileDescription>{target}</s.FileDescription>
                     <s.FileListContainer ref={props.dragRef} isDragging={props.isDragging} htmlFor="fileupload">
-                        <input
-                            type="file"
-                            id="fileUpload"
-                            style={{ display: 'none', width: '100%', height: '100%' }}
-                            multiple={true}
-                            onChange={props.onChangeFiles}
-                        />
-                        {imageList.length === 0 ? (
-                            <s.NoImageDescription>
-                                회원님의 클라우드에 이미지 파일이 존재하지 않습니다!
-                            </s.NoImageDescription>
+                        {props.isLoading ? (
+                            <s.SpinnerArea>
+                                <SpinnerCircular enabled={props.isLoading} size={100} color={'#6dc4db'} />
+                            </s.SpinnerArea>
                         ) : (
-                            imageList.map((item, index) => (
-                                <s.ImageContainer>
-                                    <img
-                                        ref={ref}
-                                        width={90}
-                                        height={90}
-                                        src={item}
-                                        onMouseOver={onMouseOverImage}
-                                        onMouseLeave={onMoustOutImage}
-                                    ></img>
-                                </s.ImageContainer>
-                            ))
+                            <>
+                                <input
+                                    type="file"
+                                    id="fileUpload"
+                                    style={{ display: 'none', width: '100%', height: '100%' }}
+                                    multiple={true}
+                                    onChange={props.onChangeFiles}
+                                />
+                                {imageList.length === 0 ? (
+                                    <s.NoImageDescription>회원님의 클라우드에 이미지 파일이 존재하지 않습니다!</s.NoImageDescription>
+                                ) : (
+                                    imageList.map((item, index) => (
+                                        <s.ImageContainer>
+                                            <img
+                                                ref={ref}
+                                                width={120}
+                                                height={120}
+                                                src={item}
+                                                onMouseOver={(e) => onMouseOverImage(e,item)}
+                                                onMouseLeave={onMoustOutImage}
+                                                onDoubleClick={() => downloadFile(item)}
+                                            ></img>
+                                        </s.ImageContainer>
+                                    ))
+                                )}
+                            </>
                         )}
                     </s.FileListContainer>
                 </s.Container>
