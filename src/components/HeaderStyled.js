@@ -45,7 +45,7 @@ export const WhiteSpace = styled.div`
     flex: 0.3;
 `;
 
-export const UserLogoArea = styled.div`
+export const UserLogoArea = styled(Link)`
     flex: 1;
     display: flex;
     align-items: center;
@@ -68,6 +68,7 @@ export const SearchInput = styled.input`
         color: '#e2e2e2';
         text-align: center;
     }
+    width: 30%;
     border-radius: 5px;
-    margin-right: 10px;
+    
 `;

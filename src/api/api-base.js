@@ -8,3 +8,11 @@ export const baseApi = Axios.create({
         'Access-Control-Allow-Credentials': 'true',
     },
 });
+
+export const UploadApi = Axios.create({
+    headers:{
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Credentials': 'true',
+    }
+});

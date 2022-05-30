@@ -40,9 +40,12 @@ const Sidebar = ({NavVisible}) => {
 
                     {/* 메뉴 영역 */}
                     <s.DropDownBlock>
-                        <StyledLink to="/directory" state ={{
-                            path: ''
-                        }}>
+                        <StyledLink
+                            to="/directory"
+                            state={{
+                                path: '',
+                            }}
+                        >
                             <s.MenuItemHaveList>내 디렉토리</s.MenuItemHaveList>
                         </StyledLink>
                         <StyledLink to="/images">
@@ -52,7 +55,9 @@ const Sidebar = ({NavVisible}) => {
                         <StyledLink to="/shared">
                             <s.MenuItemHaveList>공유받은 파일</s.MenuItemHaveList>
                         </StyledLink>
-                        <s.MenuItemHaveList>파일 업로드</s.MenuItemHaveList>
+                        <StyledLink to="/search" state={{ searchKeyword: '' }}>
+                            <s.MenuItemHaveList>검색</s.MenuItemHaveList>
+                        </StyledLink>
                     </s.DropDownBlock>
                 </s.SideBody>
             </s.DropDownMenuCorp>
