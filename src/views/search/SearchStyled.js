@@ -28,7 +28,7 @@ export const FileListHeader = styled.div`
 `;
 
 export const TitleDescription = styled.div`
-    flex: 1;
+    flex: 2;
     text-align: left;
     font-size: 30px;
     color: #6dc4db;

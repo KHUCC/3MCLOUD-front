@@ -33,11 +33,16 @@ const LoginContainer = ({...props}) => {
             res = await authApi.getUser(accessToken);
         } catch(e){}
         finally{
-            if(res.data.username){
-                navigate('/directory', {state:{
-                    path:''
-                }})
+            if(res){
+                if (res.data.username) {
+                    navigate('/directory', {
+                        state: {
+                            path: '',
+                        },
+                    });
+                }
             }
+            
         }
     }
 
@@ -54,23 +59,22 @@ const LoginContainer = ({...props}) => {
                 result = await authApi.login(loginForm);
             } catch (e) {
             } finally {
-                console.log(result);
-                if (result.data.result == "OK") {
-                    if (result.data.token !== '' && result.data.token !== null) {
-                        console.log(result.data);
-                        setAccessToken(result.data.AccessToken);
-                        setIdToken(result.data.IdToken);
-                        setUserId(id);
-                        setLoginValid(true);
-                        setUpdated(updated+1);
-                        navigate('/directory', {state:{path:''}});
-
-                    } else {
-                        setLoginValid(false);
+                if(result.data){
+                    if (result.data.result == 'OK') {
+                        if (result.data.token !== '' && result.data.token !== null) {
+                            console.log(result.data);
+                            setAccessToken(result.data.AccessToken);
+                            setIdToken(result.data.IdToken);
+                            setUserId(id);
+                            setLoginValid(true);
+                            setUpdated(updated + 1);
+                            navigate('/directory', { state: { path: '' } });
+                        } else {
+                            setLoginValid(false);
+                        }
                     }
-                } else {
-                    setLoginValid(false);
                 }
+                setLoginValid(false);
             }
         }
     };

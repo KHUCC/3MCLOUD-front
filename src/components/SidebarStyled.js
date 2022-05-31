@@ -88,8 +88,8 @@ export const DropDownBlock = styled.div`
 `;
 
 export const MenuItemHaveList = styled.div`
-  padding-top: 20px;
-  padding-bottom: 20px;
+  padding-top: 40px;
+  padding-bottom: 40px;
   text-align: center;
 
   &:hover {

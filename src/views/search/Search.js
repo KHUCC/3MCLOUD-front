@@ -3,7 +3,7 @@ import SearchPresenter from './SearchPresenter';
 import * as recoilItem from '../../utils/util';
 import { fileApi } from '../../api/api';
 import { useRecoilValue } from 'recoil';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { saveAs } from 'file-saver';
 
 const SearchContainer = () => {
@@ -19,7 +19,7 @@ const SearchContainer = () => {
 
     const [keyword, setKeyword] = useState(searchKeyword ? searchKeyword : "");
     const [fileList, setFileList] = useState([]);
-
+    const navigate = useNavigate();
     const fetchData = async () => {
         let res = null;
         if(keyword === "" ){
@@ -30,6 +30,11 @@ const SearchContainer = () => {
         try {
             res = await fileApi.search(user_id, id_token, keyword)
         } catch (e) {
+            if (e.code === 'ERR_BAD_RESPONSE') {
+                alert('세션이 만료되어 로그아웃 되었습니다!');
+                localStorage.clear();
+                window.location.href = '/';
+            }
         } finally {
             if (res && res.statusText === 'OK') {
                 console.log(res);
@@ -53,6 +58,7 @@ const SearchContainer = () => {
         try {
             res = await fileApi.download(user_id, fileName, id_token);
         } catch (e) {
+
         } finally {
             if (res && res.data.file) {
                 saveAs(res.data.file, res.data.file);

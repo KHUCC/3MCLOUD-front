@@ -54,6 +54,7 @@ export const UploadButton = styled.label`
     &:hover{
         opacity: 0.7;
     }
+    margin-left: 20px;
 `;
 
 export const SpinnerArea = styled.div`
@@ -113,7 +114,8 @@ export const FileContainer = styled.span`
         background-color: #6dc4db;
         opacity: 0.5;
     }
-    
+    background-color: ${(props) => (props.selected ? '#e2e2e2' : null)};
+    opacity: ${(props) => (props.selected ? 0.5 : 1)};
 `;
 
 export const FileName = styled.span`

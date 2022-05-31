@@ -1,4 +1,4 @@
-import React, {useEffect, useCallback, useRef, useState} from 'react';
+import React, {useEffect, useCallback, useRef, useState, Fragment} from 'react';
 import DirectoryPresenter from './DirectoryPresenter';
 import * as recoilItem from '../../utils/util';
 import { fileApi } from '../../api/api';
@@ -8,6 +8,7 @@ import {saveAs} from 'file-saver'
 import axios from 'axios';
 
 const DirectoryContainer = () => {
+    
     const [isDragging, setIsDragging] = useState(false);
     const [files, setFiles] = useState([]);
     const location = useLocation();
@@ -18,11 +19,19 @@ const DirectoryContainer = () => {
     const access_token = useRecoilValue(recoilItem.access_token);
     const id_token = useRecoilValue(recoilItem.id_token);
     const user_id = useRecoilValue(recoilItem.user_id);
-    const fileId = useRef(0);
-    const {path} = location.state;
-    const [filePath, setFilePath] = useState(path);
+    const [filePath, setFilePath] = useState("");
     const [fileList, setFileList] = useState([]);
     const [folderList, setFolderList] = useState([]);
+
+    const [selected, setSelected] = useState([]);
+
+    const onClickFile = (idx) => {
+        if(selected.find(element => element === idx) >=0){
+            setSelected(selected.filter(element => element !== idx));
+        }else{
+            setSelected([...selected, idx]);
+        }
+    }
 
     const fetchData = async() => {
         if(!id_token) {
@@ -34,12 +43,17 @@ const DirectoryContainer = () => {
         try{
             res = await fileApi.getFileList(user_id, filePath, id_token);
         }
-        catch(e){}
+        catch(e){
+            if(e.code === "ERR_BAD_RESPONSE"){
+                alert('세션이 만료되어 로그아웃 되었습니다!');
+                localStorage.clear();
+                window.location.href = '/';
+            }
+        }
         finally{
             if(res && res.statusText === "OK"){
                 setFileList(res.data.files);
                 setFolderList(res.data.folders);
-                console.log(res);
                 setIsLoading(false);
             }
             
@@ -70,58 +84,21 @@ const DirectoryContainer = () => {
         setIsDragging(true);
         }
     }, []);
+
     const onChangeFiles = useCallback(
         async (e) => {
+            console.log('파일 업로드');
             let selectFiles = [];
-            let tempFiles = files;
+            let temp = [];
             if (e.type === 'drop') {
                 selectFiles = e.dataTransfer.files;
             } else {
                 selectFiles = e.target.files;
             }
-            console.log(e.target.files);
-            setIsLoading(true);
-            let formData = new FormData();
-            Array.from(selectFiles).forEach(file => {
-                formData.append('files', file);
-            });
-            formData.append('user_id', user_id);
-            formData.append('IdToken', id_token);
-            formData.append('file_path', filePath === "" ? filePath : filePath+"/");
-            formData.append('compression', 'false');
-            formData.append('isAudio', 'false'); 
-            formData.append('enctype', 'multipart/form-data');
-            let res = null;
-            try{
-                res = await fileApi.upload(formData);
-            } catch(e){}
-            finally{
-                if(res && res.data === "Upload succeed"){
-                } 
-                setIsLoading(false);
-            }
-            // axios({
-            //     method:'post',
-            //     url: 'http://localhost:3000/file/upload/',
-            //     data: formData,
-            //     headers:{
-            //         "Content-Type": "multipart/form-data",
-            //     }
-            // }).then(function(response){
-            //     console.log('result')
-            //     console.log(response);
-            // });
-            // Array.from(selectFiles).forEach((file) => {
-            //     tempFiles = [
-            //         ...tempFiles,
-            //         // {
-            //         //     id: (fileId.current += 1),
-            //         //     object: file,
-            //         // },
-            //         file
-            //     ];
-            // });
-            // setFiles(tempFiles);
+             Array.from(selectFiles).forEach((file) => {
+                temp.push(file);
+             });
+            setFiles(temp);
         },
         [files]
     );
@@ -157,6 +134,96 @@ const DirectoryContainer = () => {
         }
     }, [handleDragIn, handleDragOut, handleDragOver, handleDrop]);
     
+    const makeNewFolder = async() => {
+        let foldername = new String;
+        foldername = prompt('생성할 폴더 이름을 입력해주세요');
+        if(!foldername) return;
+        while(foldername === '' || foldername.search('/') >= 0){
+            foldername = prompt('폴더 이름은 공백이거나 "/"가 들어갈 수 없습니다. 다시 입력해주세요');
+        }
+        let formData = {
+            file_path: filePath === '' ? filePath + foldername +"/" : filePath+"/"+foldername + "/",
+            IdToken: id_token,
+            user_id: user_id
+        }
+        console.log(formData);
+        let res = null;
+        try{
+            res=  await fileApi.makeFolder(formData);
+        } catch(e){}
+        finally{
+            console.log(res);
+            fetchData();
+        }
+        fetchData();   
+    }
+
+    const fileUpload = async () => {
+
+        let formData = new FormData();
+        if(files.length ===0 ) return;
+
+        formData.append('user_id', user_id);
+        formData.append('IdToken', id_token);
+        formData.append('file_path', filePath === "" ? filePath : filePath + "/");
+        formData.append('compression', 'false');
+        formData.append('isAudio', 'false');
+        formData.append('enctype', 'multipart/form-data');
+        setIsLoading(true);
+        let res = null;
+        try{
+            res = await fileApi.upload(formData);
+        } catch(e){}
+        finally{
+            if(res && res.data === "Upload succeed"){
+                fetchData();
+            } else{
+                alert('업로드에 실패하였습니다');
+            }
+            fetchData();
+            setIsLoading(false);
+        }
+    };
+
+    const deleteFile = async() => {
+        if(window.confirm('정말로 삭제하시겠습니까?')){
+            let fileNameList = [];
+            selected.forEach(idx => {
+                fileNameList.push(fileList[idx]);
+            });
+            let formData = {
+                user_id: user_id,
+                file_path: filePath === "" ? "" : filePath + "/",
+                file_list: fileNameList,
+                IdToken: id_token,
+            }
+            let res = null;
+            setIsLoading(true);
+            try{
+                res = await fileApi.deleteFile(formData);
+            } catch(e){
+                if (e.code === 'ERR_BAD_RESPONSE') {
+                    alert('세션이 만료되어 로그아웃 되었습니다!');
+                    localStorage.clear();
+                    window.location.href = '/';
+                }
+            } finally{
+                if(res){
+                    console.log(res);
+                    if(res.data.result === "Delete succeed"){
+                        alert('삭제되었습니다');
+                    } else{
+                        alert('삭제에 실패하였습니다');
+                    }
+                } else{
+                    alert('삭제에 실패하였습니다');
+                }
+                setSelected([]);
+                fetchData();
+                setIsLoading(false);
+            }
+        } return;
+    }
 
     useEffect(() => {
         initDragEvents();
@@ -165,48 +232,9 @@ const DirectoryContainer = () => {
     }, [initDragEvents, resetDragEvents]);
 
 
-    const fileUpload = async(e) =>{
-        console.log(e.target.files);
-
-        if(files.length === 0) return;
-        setIsLoading(true);
-        let formData = new FormData();
-        let fileList = ([]);
-        files.forEach(element => {
-            fileList.push(element.object);
-        });
-        console.log(fileList[0]);
-        console.log(files[0].object);
-        formData.append('files', fileList[0]);
-        
-        formData.append('user_id', user_id);
-        formData.append('IdToken', id_token);
-        formData.append('file_path', filePath);
-        formData.append('compression', 'false');
-        formData.append('isAudio', 'false');
-        // {
-        //     files: files,
-        //     user_id: user_id,
-        //     IdToken: id_token,
-        //     file_path: filePath,
-        //     compression: false,
-        //     isAudio: false,
-        // }
-        // console.log(formData);
-        // let res = null;
-        // try{
-        //     res = await fileApi.upload(formData);
-        // } catch(e){}
-        // finally{
-        //     console.log(res);
-        //     setFiles([]);
-        //     fetchData();
-        // }
-    };
-
-    // useEffect(() => {
-    //     fileUpload();
-    // }, [files]);    
+    useEffect(() => {
+        fileUpload();
+    }, [files]);    
 
     const downloadFile = async(fileName) => {
         let res = null;
@@ -232,7 +260,11 @@ const DirectoryContainer = () => {
             setFilePath={setFilePath}
             isLoading={isLoading}
             downloadFile={downloadFile}
-            fileUpload={fileUpload}
+            makeNewFolder={makeNewFolder}
+            onClickFile={onClickFile}
+            selected={selected}
+            setSelected={setSelected}
+            deleteFile={deleteFile}
         />
     );
 }
