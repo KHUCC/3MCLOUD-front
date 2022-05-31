@@ -82,9 +82,6 @@ const Sidebar = ({...props}) => {
                             <s.MenuItemHaveList>사진</s.MenuItemHaveList>
                         </StyledLink>
                         <s.MenuItemHaveList>오디오</s.MenuItemHaveList>
-                        <StyledLink to="/shared">
-                            <s.MenuItemHaveList>공유받은 파일</s.MenuItemHaveList>
-                        </StyledLink>
                         <StyledLink to="/search" state={{ searchKeyword: '' }}>
                             <s.MenuItemHaveList>검색</s.MenuItemHaveList>
                         </StyledLink>

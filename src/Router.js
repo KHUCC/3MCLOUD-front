@@ -33,7 +33,6 @@ export default ({}) => {
                 <Sidebar NavVisible={NavVisible} setNavVisible={setNavVisible} onClickMenu={() => onClickMenu()} />
                 <Header NavVisible={NavVisible} setNavVisible={setNavVisible} onClickMenu={onClickMenu} />
                 <Routes>
-                    <Route path="/shared" element={<SharedFileList />}></Route>
                     <Route path="/images" element={<ImageList />}></Route>
                     <Route path="/directory" element={<Directory />}></Route>
                     <Route path="/search" element={<SearchContainer />}></Route>

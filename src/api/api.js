@@ -18,5 +18,8 @@ export const fileApi = {
     // upload: (files, user_id, IdToken, file_path, compression, isAudio) => baseApi.post(`file/upload/?files=${files}&user_id=${user_id}&IdToken=${IdToken}&file_path=${file_path}&compression=${compression}&isAudio=${isAudio}`),
     download: (userId, fileName, token) => baseApi.get(`file/download/?user_id=${userId}&file_name=${fileName}&IdToken=${token}`),
     //getFileList: (user_id, file_path) => baseApi.get(`file/user_id?${user_id}&file_path?${file_path}`)
-    search: (user_id, token, keyword) => baseApi.get(`file/search/?user_id=${user_id}&IdToken=${token}&keyword=${keyword}`)
+    search: (user_id, token, keyword) => baseApi.get(`file/search/?user_id=${user_id}&IdToken=${token}&keyword=${keyword}`),
+    makeFolder: (Data) => baseApi.post(`file/makefolder/`, Data),
+    deleteFile: (Data) => baseApi.post(`file/delete/`, Data),
+
 };
