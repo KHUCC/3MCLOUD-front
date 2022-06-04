@@ -28,7 +28,6 @@ const LoginContainer = ({...props}) => {
 
     const tokenCheck = async() => {
         let res = null;
-        console.log(accessToken);
         try{
             res = await authApi.getUser(accessToken);
         } catch(e){}
@@ -64,7 +63,6 @@ const LoginContainer = ({...props}) => {
                 if(result.data){
                     if (result.data.result == 'OK') {
                         if (result.data.token !== '' && result.data.token !== null) {
-                            console.log(result.data);
                             setAccessToken(result.data.AccessToken);
                             setIdToken(result.data.IdToken);
                             setUserId(id);

@@ -32,7 +32,6 @@ const AudioListContainer = () => {
             if (res && res.statusText === 'OK') {
                 setAudioList(res.data.audio_files);
             }
-            console.log(res);
             setIsLoading(false);
         }
     };

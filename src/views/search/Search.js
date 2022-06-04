@@ -37,7 +37,6 @@ const SearchContainer = () => {
             }
         } finally {
             if (res && res.statusText === 'OK') {
-                console.log(res);
                 setFileList(res.data.result_files);
                 setIsLoading(false);
             }
@@ -54,7 +53,6 @@ const SearchContainer = () => {
 
     const downloadFile = async (fileName) => {
         let res = null;
-        console.log('filename', fileName);
         try {
             res = await fileApi.download(user_id, fileName, id_token);
         } catch (e) {

@@ -87,7 +87,6 @@ const DirectoryContainer = () => {
 
     const onChangeFiles = useCallback(
         async (e) => {
-            console.log('파일 업로드');
             let selectFiles = [];
             let temp = [];
             if (e.type === 'drop') {
@@ -146,13 +145,11 @@ const DirectoryContainer = () => {
             IdToken: id_token,
             user_id: user_id
         }
-        console.log(formData);
         let res = null;
         try{
             res=  await fileApi.makeFolder(formData);
         } catch(e){}
         finally{
-            console.log(res);
             fetchData();
         }
         fetchData();   
@@ -177,7 +174,6 @@ const DirectoryContainer = () => {
             res = await fileApi.upload(formData);
         } catch(e){}
         finally{
-            console.log(res);
             if(res && res.data.result === "Upload succeed"){
                 fetchData();
             } else{
@@ -212,7 +208,6 @@ const DirectoryContainer = () => {
                 }
             } finally{
                 if(res){
-                    console.log(res);
                     if(res.data.result === "Delete succeed"){
                         alert('삭제되었습니다');
                     } else{
@@ -241,7 +236,6 @@ const DirectoryContainer = () => {
 
     const downloadFile = async(fileName) => {
         let res = null;
-        console.log('filename', fileName);
         try{
             res = await fileApi.download(user_id, fileName, id_token);
         } catch(e){}

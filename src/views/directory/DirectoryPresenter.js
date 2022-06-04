@@ -24,7 +24,6 @@ const DirectoryPresenter = ({...props}) => {
     } = props;
     const prevFolder = (path) => {
         let paths = path.split("/");
-        console.log(paths);
         if(paths.length == 1){
             return "";
         } else {
