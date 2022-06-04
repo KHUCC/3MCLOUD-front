@@ -58,6 +58,8 @@ const LoginContainer = ({...props}) => {
             try {
                 result = await authApi.login(loginForm);
             } catch (e) {
+                alert('서버로부터 응답이 없거나 에러가 발생하였습니다');
+                return;
             } finally {
                 if(result.data){
                     if (result.data.result == 'OK') {

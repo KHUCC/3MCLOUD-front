@@ -12,7 +12,7 @@ const ImageListPresenter = ({...props}) => {
     const onMouseOverImage = (e, item) => {
         let newFileName = item.split('/');
         newFileName = newFileName[newFileName.length - 1];
-        setX(e.target.getBoundingClientRect().x+100);
+        setX(e.target.getBoundingClientRect().x+130);
         setY(e.target.getBoundingClientRect().y);
         setTargetImage(e.target.src);
         setTarget(newFileName);
@@ -31,7 +31,7 @@ const ImageListPresenter = ({...props}) => {
         <>
             {x ? (
                 <s.ImagePreview x={x} y={y}>
-                    <img width={300} height={300} src={targetImage} />
+                    <img width={500} height={300} src={targetImage} />
                 </s.ImagePreview>
             ) : null}
             <s.Wrapper>
