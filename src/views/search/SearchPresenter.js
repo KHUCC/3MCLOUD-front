@@ -43,7 +43,7 @@ const SearchPresenter = ({ ...props }) => {
                                         >
                                             <AiOutlineFile size={90} />
                                             <br />
-                                            <s.FileName>{textLengthOverCut({ txt: item.file_name, len: 15, lastTxt: '...' })}</s.FileName>
+                                            <s.FileName>{textLengthOverCut({ txt: item.file_name, len: 13, lastTxt: '...' })}</s.FileName>
                                         </s.FileContainer>
                                     ))
                                 )}

@@ -88,18 +88,32 @@ export const DropDownBlock = styled.div`
 `;
 
 export const MenuItemHaveList = styled.div`
-  padding-top: 40px;
-  padding-bottom: 40px;
-  text-align: center;
+    padding-top: 40px;
+    padding-bottom: 40px;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    text-align: center;
 
-  &:hover {
-    color: black;
-  }
-  cursor: pointer;
+    &:hover {
+        color: black;
+    }
+    cursor: pointer;
 
-  background-color: ${(props) => (props.isVisible ? '#f1f3f5' : 'none')};
-  font-weight: ${(props) => (props.isVisible ? 'bold' : 'none')};
-  margin: 1rem 1rem;
+    background-color: ${(props) => (props.isVisible ? '#f1f3f5' : 'none')};
+    font-weight: ${(props) => (props.isVisible ? 'bold' : 'none')};
+    
+
+    &:hover {
+        font-weight: bold;
+        background-color: #63aabe;
+        color: white;
+        opacity: 0.7;
+    }
+    -webkit-transition: all 0.4s ease-out 0s;
+    -moz-transition: all 0.4s ease-out 0s;
+    -ms-transition: all 0.4s ease-out 0s;
+    -o-transition: all 0.4s ease-out 0s;
+    transition: all 0.4s ease-out 0s;
 `;
 
 export const MenuItemUl = styled.ul`

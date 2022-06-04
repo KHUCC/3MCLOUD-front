@@ -10,15 +10,15 @@ import { authApi } from '../api/api';
 import {FiLogOut} from 'react-icons/fi';
 
 const StyledLink = styled(Link)`
-    text-decoration: none;
-
     &:focus,
     &:hover,
     &:visited,
     &:link,
     &:active {
         text-decoration: none;
+        color: black;
     }
+    width: 100%;
 `;
 
 
@@ -49,47 +49,47 @@ const Sidebar = ({...props}) => {
         }
     }
 
-    return (
-        idToken ? 
-            <s.DropDownMenuCorp NavVisible={NavVisible}>
-                <s.SideHeader>
-                    <s.LogoutArea>
-                        <FiLogOut size={30} style={{cursor:'pointer'}} onClick ={onLogout}/>
-                    </s.LogoutArea>
-                    <s.SideMenuButton>
-                        <BiX color="white" size="30" />
-                    </s.SideMenuButton>
-                </s.SideHeader>
-                <s.SideBody>
-                    {/* 유저 프로필 영역 */}
-                    <s.ProfileBlock>
-                        <IoPersonCircle size="50" color="#1E2F68" />
-                        <s.ProfileUserName>{userId}</s.ProfileUserName>
-                        {/* <s.ProfileUserDept>사용 가능 공간: 1.50 GB / 4.00GB</s.ProfileUserDept> */}
-                    </s.ProfileBlock>
+    return idToken ? (
+        <s.DropDownMenuCorp NavVisible={NavVisible}>
+            <s.SideHeader>
+                <s.LogoutArea>
+                    <FiLogOut size={30} style={{ cursor: 'pointer' }} onClick={onLogout} />
+                </s.LogoutArea>
+                <s.SideMenuButton>
+                    <BiX color="white" size="30" />
+                </s.SideMenuButton>
+            </s.SideHeader>
+            <s.SideBody>
+                {/* 유저 프로필 영역 */}
+                <s.ProfileBlock>
+                    <IoPersonCircle size="50" color="#1E2F68" />
+                    <s.ProfileUserName>{userId}</s.ProfileUserName>
+                    {/* <s.ProfileUserDept>사용 가능 공간: 1.50 GB / 4.00GB</s.ProfileUserDept> */}
+                </s.ProfileBlock>
 
-                    {/* 메뉴 영역 */}
-                    <s.DropDownBlock>
-                        <StyledLink
-                            to="/directory"
-                            state={{
-                                path: '',
-                            }}
-                        >
-                            <s.MenuItemHaveList>내 디렉토리</s.MenuItemHaveList>
-                        </StyledLink>
-                        <StyledLink to="/images">
-                            <s.MenuItemHaveList>사진</s.MenuItemHaveList>
-                        </StyledLink>
+                {/* 메뉴 영역 */}
+                <s.DropDownBlock>
+                    <StyledLink
+                        to="/directory"
+                        state={{
+                            path: '',
+                        }}
+                    >
+                        <s.MenuItemHaveList>내 디렉토리</s.MenuItemHaveList>
+                    </StyledLink>
+                    <StyledLink to="/images">
+                        <s.MenuItemHaveList>사진</s.MenuItemHaveList>
+                    </StyledLink>
+                    <StyledLink to="/audios">
                         <s.MenuItemHaveList>오디오</s.MenuItemHaveList>
-                        <StyledLink to="/search" state={{ searchKeyword: '' }}>
-                            <s.MenuItemHaveList>검색</s.MenuItemHaveList>
-                        </StyledLink>
-                    </s.DropDownBlock>
-                </s.SideBody>
-            </s.DropDownMenuCorp>
-        : null
-    );
+                    </StyledLink>
+                    <StyledLink to="/search" state={{ searchKeyword: '' }}>
+                        <s.MenuItemHaveList>검색</s.MenuItemHaveList>
+                    </StyledLink>
+                </s.DropDownBlock>
+            </s.SideBody>
+        </s.DropDownMenuCorp>
+    ) : null;
 }
 
 export default Sidebar;

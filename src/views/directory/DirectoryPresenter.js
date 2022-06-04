@@ -90,7 +90,7 @@ const DirectoryPresenter = ({...props}) => {
                                                   }}
                                               >
                                                   <BsFolder size={90} /> <br />
-                                                  <s.FileName>{textLengthOverCut({ txt: item, len: 15, lastTxt: '...' })}</s.FileName>
+                                                  <s.FileName>{textLengthOverCut({ txt: item, len: 13, lastTxt: '...' })}</s.FileName>
                                               </s.FileContainer>
                                           )
                                       )
@@ -107,7 +107,7 @@ const DirectoryPresenter = ({...props}) => {
                                           >
                                               <BsFileEarmark size={90} />
                                               <br />
-                                              <s.FileName>{textLengthOverCut({ txt: item, len: 15, lastTxt: '...' })}</s.FileName>
+                                              <s.FileName>{textLengthOverCut({ txt: item, len: 13, lastTxt: '...' })}</s.FileName>
                                           </s.FileContainer>
                                       ))
                                     : null}

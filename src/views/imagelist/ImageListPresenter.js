@@ -16,7 +16,6 @@ const ImageListPresenter = ({...props}) => {
         setY(e.target.getBoundingClientRect().y);
         setTargetImage(e.target.src);
         setTarget(newFileName);
-        
     }
 
     const onMoustOutImage = () => {
@@ -38,25 +37,18 @@ const ImageListPresenter = ({...props}) => {
                 <s.Container>
                     <s.FileGroupTitle>내 디렉토리 - 이미지</s.FileGroupTitle>
                     <s.FileDescription>{target}</s.FileDescription>
-                    <s.FileListContainer ref={props.dragRef} isDragging={props.isDragging} htmlFor="fileupload">
+                    <s.FileListContainer>
                         {props.isLoading ? (
                             <s.SpinnerArea>
                                 <SpinnerCircular enabled={props.isLoading} size={100} color={'#6dc4db'} />
                             </s.SpinnerArea>
                         ) : (
                             <>
-                                <input
-                                    type="file"
-                                    id="fileUpload"
-                                    style={{ display: 'none', width: '100%', height: '100%' }}
-                                    multiple={true}
-                                    onChange={props.onChangeFiles}
-                                />
                                 {imageList.length === 0 ? (
                                     <s.NoImageDescription>회원님의 클라우드에 이미지 파일이 존재하지 않습니다!</s.NoImageDescription>
                                 ) : (
                                     imageList.map((item, index) => (
-                                        <s.ImageContainer>
+                                        <s.ImageContainer key = {index}>
                                             <img
                                                 ref={ref}
                                                 width={120}

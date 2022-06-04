@@ -162,7 +162,9 @@ const DirectoryContainer = () => {
 
         let formData = new FormData();
         if(files.length ===0 ) return;
-
+        files.forEach(file => {
+            formData.append('files', file);
+        });
         formData.append('user_id', user_id);
         formData.append('IdToken', id_token);
         formData.append('file_path', filePath === "" ? filePath : filePath + "/");
@@ -175,7 +177,8 @@ const DirectoryContainer = () => {
             res = await fileApi.upload(formData);
         } catch(e){}
         finally{
-            if(res && res.data === "Upload succeed"){
+            console.log(res);
+            if(res && res.data.result === "Upload succeed"){
                 fetchData();
             } else{
                 alert('업로드에 실패하였습니다');
