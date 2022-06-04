@@ -18,7 +18,6 @@ export default ({}) => {
     const [NavVisible, setNavVisible] = useState(true);
     const idtoken = useRecoilValue(u.id_token);
     const onClickMenu = () => {
-        console.log(idtoken);
         if(!idtoken) {
             setNavVisible(false);
         }
